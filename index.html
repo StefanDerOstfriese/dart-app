@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dart Checkout Practice</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen active">
+            <div class="screen-content">
+                <h1>🎯 Dart Checkout Practice</h1>
+                <p class="subtitle">Master your double out finishes</p>
+                <button id="start-btn" class="btn btn-primary">Start Practice</button>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-container">
+                <div class="target-info">
+                    <div class="label">Checkout</div>
+                    <div class="target-number" id="target-number">—</div>
+                    <div class="label">Remaining</div>
+                    <div class="remaining-number" id="remaining-number">—</div>
+                </div>
+
+                <div class="dartboard-wrapper">
+                    <svg id="dartboard" viewBox="0 0 500 500" class="dartboard"></svg>
+                </div>
+
+                <div class="darts-display">
+                    <div class="dart-slot" id="dart-0"></div>
+                    <div class="dart-slot" id="dart-1"></div>
+                    <div class="dart-slot" id="dart-2"></div>
+                </div>
+
+                <div class="game-buttons">
+                    <button id="reset-btn" class="btn btn-secondary">Reset Darts</button>
+                    <button id="skip-btn" class="btn btn-secondary">Skip Target</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen">
+            <div class="screen-content result-content">
+                <div class="target-info" style="margin-bottom: 20px;">
+                    <div class="label">Checkout Target</div>
+                    <div class="target-number" id="result-target-number">—</div>
+                </div>
+                <div id="result-status" class="result-status"></div>
+                <div class="result-darts">
+                    <div class="label">Your Checkout</div>
+                    <div id="result-your-darts" class="checkout-display"></div>
+                </div>
+                <div id="optimal-section" class="result-darts" style="display: none;">
+                    <div class="label">Optimal Checkout</div>
+                    <div id="result-optimal-darts" class="checkout-display"></div>
+                </div>
+                <button id="next-btn" class="btn btn-primary">Next Target</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="checkouts.js"></script>
+    <script src="dartboard.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
