@@ -166,8 +166,6 @@ function renderResultScreen() {
     const targetDisplay = document.getElementById('result-target-number');
     const status = document.getElementById('result-status');
     const yourDarts = document.getElementById('result-your-darts');
-    const optimalSection = document.getElementById('optimal-section');
-    const optimalDarts = document.getElementById('result-optimal-darts');
 
     // Show target number
     if (targetDisplay) targetDisplay.textContent = state.target;
@@ -176,42 +174,155 @@ function renderResultScreen() {
     const { valid } = state.lastResult;
 
     if (valid) {
-        status.textContent = '✓ Geschafft!';
+        status.textContent = I18n.t('resultSuccess');
         status.className = 'result-status optimal';
     } else {
-        status.textContent = '✗ Nicht geschafft';
+        status.textContent = I18n.t('resultFail');
         status.className = 'result-status invalid';
     }
 
     // Show your darts
-    yourDarts.innerHTML = state.darts.map((dart) => `<div class="dart-item">${dart}</div>`).join('');
+    yourDarts.innerHTML = state.darts.map((dart) => `<span class="dart-item">${dart}</span>`).join('');
 
-    // Show other variants
-    const variants = Checkouts.getCheckoutVariants(state.target);
-    const otherVariants = variants.filter(
-        (v) => JSON.stringify(v) !== JSON.stringify(state.darts)
-    );
+    // Show premium checkouts
+    const premium = window.PremiumCheckouts[state.target];
+    console.log(`Target: ${state.target}, Premium data:`, premium);
 
-    if (otherVariants.length > 0) {
-        optimalSection.style.display = 'block';
-        // Update label
-        const label = optimalSection.querySelector('.label');
-        if (label) label.textContent = 'Other Variants';
-
-        // Show variants as separate items
-        optimalDarts.innerHTML = otherVariants
-            .map(
-                (variant) =>
-                    `<div class="variant-item">${variant.map((dart) => `<span class="dart-item">${dart}</span>`).join(' + ')}</div>`
-            )
-            .join('');
+    // V1 Card
+    const v1Card = document.getElementById('premium-v1-card');
+    const v1Darts = document.getElementById('premium-v1-darts');
+    if (premium && premium.v1) {
+        v1Card.style.display = 'block';
+        v1Darts.innerHTML = renderDartSequence(premium.v1);
+        console.log('V1 displayed:', premium.v1);
     } else {
-        optimalSection.style.display = 'none';
+        v1Card.style.display = 'none';
     }
+
+    // V2 Card
+    const v2Card = document.getElementById('premium-v2-card');
+    const v2Darts = document.getElementById('premium-v2-darts');
+    if (premium && premium.v2) {
+        v2Card.style.display = 'block';
+        v2Darts.innerHTML = renderDartSequence(premium.v2);
+        console.log('V2 displayed:', premium.v2);
+    } else {
+        v2Card.style.display = 'none';
+    }
+
+    // 2-Dart Card
+    const tdCard = document.getElementById('premium-2dart-card');
+    const tdDarts = document.getElementById('premium-2dart-darts');
+    if (premium && premium.twoDart) {
+        tdCard.style.display = 'block';
+        tdDarts.innerHTML = renderDartSequence(premium.twoDart);
+        console.log('2-Dart displayed:', premium.twoDart);
+    } else {
+        tdCard.style.display = 'none';
+    }
+}
+
+// Change language and update UI
+function switchLanguage(lang) {
+    I18n.init(lang);
+    I18n.applyTranslations();
+    updateLanguageToggleButtons();
+}
+
+// Update active state of language toggle buttons
+function updateLanguageToggleButtons() {
+    const enBtn = document.getElementById('lang-toggle-en');
+    const deBtn = document.getElementById('lang-toggle-de');
+
+    if (enBtn && deBtn) {
+        if (I18n.currentLang === 'en') {
+            enBtn.classList.add('active');
+            deBtn.classList.remove('active');
+        } else {
+            enBtn.classList.remove('active');
+            deBtn.classList.add('active');
+        }
+    }
+}
+
+// Helper function to render dart sequence
+function renderDartSequence(darts) {
+    return darts.map(d => `<span class="dart-item">${d}</span>`).join('');
 }
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // Load Premium Checkouts CSV
+    window.PremiumCheckouts = {};
+    fetch('Premium_Checkouts.csv')
+        .then(r => r.text())
+        .then(text => {
+            const lines = text.trim().split('\n').slice(2); // 2 Header-Zeilen überspringen
+            lines.forEach(line => {
+                const cols = line.split(';').map(c => c.trim());
+                const score = parseInt(cols[0]);
+                if (!score) return;
+                const v1 = [cols[1], cols[2], cols[3]].filter(c => c && c !== '-');
+                const v2Raw = [cols[4], cols[5], cols[6]].filter(c => c && c !== '-');
+                const tdRaw = [cols[7], cols[8]].filter(c => c && c !== '-');
+                window.PremiumCheckouts[score] = {
+                    v1: v1.length > 0 ? v1 : null,
+                    v2: v2Raw.length > 0 ? v2Raw : null,
+                    twoDart: tdRaw.length > 0 ? tdRaw : null,
+                };
+            });
+            console.log('Premium Checkouts loaded:', Object.keys(window.PremiumCheckouts).length, 'scores');
+        })
+        .catch(err => console.error('Error loading Premium_Checkouts.csv:', err));
+
+    // Language selection on first load
+    let savedLang;
+    try {
+        savedLang = localStorage.getItem('dart-lang');
+    } catch (e) {
+        // localStorage not available
+    }
+
+    if (savedLang) {
+        // Restore saved language and skip to start screen
+        switchLanguage(savedLang);
+        switchScreen('start');
+    } else {
+        // Show language selection screen
+        const langEnBtn = document.getElementById('lang-en-btn');
+        const langDeBtn = document.getElementById('lang-de-btn');
+
+        if (langEnBtn) {
+            langEnBtn.addEventListener('click', () => {
+                switchLanguage('en');
+                switchScreen('start');
+            });
+        }
+
+        if (langDeBtn) {
+            langDeBtn.addEventListener('click', () => {
+                switchLanguage('de');
+                switchScreen('start');
+            });
+        }
+    }
+
+    // Language toggle buttons (top right)
+    const langToggleEn = document.getElementById('lang-toggle-en');
+    const langToggleDe = document.getElementById('lang-toggle-de');
+
+    if (langToggleEn) {
+        langToggleEn.addEventListener('click', () => {
+            switchLanguage('en');
+        });
+    }
+
+    if (langToggleDe) {
+        langToggleDe.addEventListener('click', () => {
+            switchLanguage('de');
+        });
+    }
+
     // Start button
     const startBtn = document.getElementById('start-btn');
     if (startBtn) {

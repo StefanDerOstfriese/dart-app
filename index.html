@@ -3,17 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dart Checkout Practice</title>
+    <title data-i18n="pageTitle">Dart Checkout Practice</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="language-switcher">
+        <button id="lang-toggle-en" class="lang-toggle-btn" title="English">🇬🇧</button>
+        <button id="lang-toggle-de" class="lang-toggle-btn" title="Deutsch">🇩🇪</button>
+    </div>
+
     <div class="container">
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen active">
+        <!-- Language Selection Screen -->
+        <div id="lang-screen" class="screen active">
             <div class="screen-content">
                 <h1>🎯 Dart Checkout Practice</h1>
-                <p class="subtitle">Master your double out finishes</p>
-                <button id="start-btn" class="btn btn-primary">Start Practice</button>
+                <p class="subtitle">Choose your language / Sprache wählen</p>
+                <div class="lang-buttons">
+                    <button id="lang-en-btn" class="btn btn-secondary lang-btn">🇬🇧 English</button>
+                    <button id="lang-de-btn" class="btn btn-secondary lang-btn">🇩🇪 Deutsch</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="screen-content">
+                <h1 data-i18n="h1">🎯 Dart Checkout Practice</h1>
+                <p class="subtitle" data-i18n="subtitle">Master your double out finishes</p>
+                <button id="start-btn" class="btn btn-primary" data-i18n="startBtn">Start Practice</button>
             </div>
         </div>
 
@@ -21,9 +38,9 @@
         <div id="game-screen" class="screen">
             <div class="game-container">
                 <div class="target-info">
-                    <div class="label">Checkout</div>
+                    <div class="label" data-i18n="labelCheckout">Checkout</div>
                     <div class="target-number" id="target-number">—</div>
-                    <div class="label">Remaining</div>
+                    <div class="label" data-i18n="labelRemaining">Remaining</div>
                     <div class="remaining-number" id="remaining-number">—</div>
                 </div>
 
@@ -38,8 +55,8 @@
                 </div>
 
                 <div class="game-buttons">
-                    <button id="reset-btn" class="btn btn-secondary">Reset Darts</button>
-                    <button id="skip-btn" class="btn btn-secondary">Skip Target</button>
+                    <button id="reset-btn" class="btn btn-secondary" data-i18n="resetBtn">Reset Darts</button>
+                    <button id="skip-btn" class="btn btn-secondary" data-i18n="skipBtn">Skip Target</button>
                 </div>
             </div>
         </div>
@@ -48,23 +65,34 @@
         <div id="result-screen" class="screen">
             <div class="screen-content result-content">
                 <div class="target-info" style="margin-bottom: 20px;">
-                    <div class="label">Checkout Target</div>
+                    <div class="label" data-i18n="labelCheckoutTarget">Checkout Target</div>
                     <div class="target-number" id="result-target-number">—</div>
                 </div>
                 <div id="result-status" class="result-status"></div>
-                <div class="result-darts">
-                    <div class="label">Your Checkout</div>
-                    <div id="result-your-darts" class="checkout-display"></div>
+                <div class="checkouts-grid">
+                    <div class="checkout-card">
+                        <div class="label" data-i18n="labelYourCheckout">Your Checkout</div>
+                        <div id="result-your-darts" class="checkout-display"></div>
+                    </div>
+                    <div class="checkout-card" id="premium-v1-card">
+                        <div class="label" data-i18n="labelPremiumV1">Premium V. 1</div>
+                        <div id="premium-v1-darts" class="checkout-display"></div>
+                    </div>
+                    <div class="checkout-card" id="premium-v2-card">
+                        <div class="label" data-i18n="labelPremiumV2">Premium V. 2</div>
+                        <div id="premium-v2-darts" class="checkout-display"></div>
+                    </div>
+                    <div class="checkout-card" id="premium-2dart-card">
+                        <div class="label" data-i18n="label2DartVariant">2-Dart</div>
+                        <div id="premium-2dart-darts" class="checkout-display"></div>
+                    </div>
                 </div>
-                <div id="optimal-section" class="result-darts" style="display: none;">
-                    <div class="label">Optimal Checkout</div>
-                    <div id="result-optimal-darts" class="checkout-display"></div>
-                </div>
-                <button id="next-btn" class="btn btn-primary">Next Target</button>
+                <button id="next-btn" class="btn btn-primary" data-i18n="nextBtn">Next Target</button>
             </div>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="checkouts.js"></script>
     <script src="dartboard.js"></script>
     <script src="app.js"></script>
