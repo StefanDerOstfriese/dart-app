@@ -17,7 +17,9 @@ window.I18n = {
             nextBtn: 'Next Target',
             resultSuccess: '✓ Done!',
             resultFail: '✗ Not done',
-            resultPremium: '⭐ Premium Checkout!'
+            resultPremium: '⭐ Premium Checkout!',
+            toggleRemaining: 'Remaining',
+            toggleNumbers: 'Numbers'
         },
         de: {
             pageTitle: 'Dart Checkout Übung',
@@ -36,7 +38,9 @@ window.I18n = {
             nextBtn: 'Nächstes Ziel',
             resultSuccess: '✓ Geschafft!',
             resultFail: '✗ Nicht geschafft',
-            resultPremium: '⭐ Du hast einen Premium Checkout gespielt!'
+            resultPremium: '⭐ Du hast einen Premium Checkout gespielt!',
+            toggleRemaining: 'Restpunkte',
+            toggleNumbers: 'Zahlen'
         }
     },
 

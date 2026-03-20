@@ -28,11 +28,20 @@ body {
     position: relative;
 }
 
-/* Language Switcher */
+/* Language & View Switcher */
 .language-switcher {
     position: fixed;
     top: 20px;
     right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.view-toggles {
+    position: fixed;
+    top: 20px;
+    right: 180px;
     display: flex;
     gap: 8px;
     z-index: 1000;
@@ -262,31 +271,30 @@ h1 {
 }
 
 /* View toggles */
-.view-toggles {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.toggle-btn {
-    padding: 6px 14px;
-    border: 1.5px solid var(--border-color);
+.view-toggle-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
     background-color: var(--bg-card);
     color: var(--text-secondary);
-    border-radius: 20px;
-    font-size: 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.toggle-btn.active {
+.view-toggle-btn:hover {
     border-color: var(--accent-primary);
-    color: var(--text-primary);
+    background-color: #353535;
 }
 
-.toggle-btn:hover {
+.view-toggle-btn.active {
+    background-color: var(--accent-primary);
     border-color: var(--accent-primary);
+    color: white;
 }
 
 /* Result Screen */
@@ -420,10 +428,22 @@ h1 {
         gap: 6px;
     }
 
+    .view-toggles {
+        top: 10px;
+        right: 130px;
+        gap: 6px;
+    }
+
     .lang-toggle-btn {
         width: 36px;
         height: 36px;
         font-size: 1rem;
+        border-width: 1.5px;
+    }
+
+    .view-toggle-btn {
+        padding: 6px 10px;
+        font-size: 0.75rem;
         border-width: 1.5px;
     }
 
