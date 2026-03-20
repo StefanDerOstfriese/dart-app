@@ -168,11 +168,18 @@ const OPTIMAL_CHECKOUTS = {
 function parseScore(notation) {
     if (!notation || typeof notation !== 'string') return 0;
 
-    const match = notation.match(/^([DTS]?)(\d+|-Bull)$/);
+    const match = notation.match(/^([DTS]?)(\d+|Bull|-Bull)$/);
     if (!match) return 0;
 
     const [, modifier, value] = match;
-    const numValue = value === '-Bull' ? 50 : parseInt(value, 10);
+    let numValue;
+    if (value === 'Bull') {
+        numValue = 25; // Single Bull
+    } else if (value === '-Bull') {
+        numValue = 50; // Double Bull (Bullseye)
+    } else {
+        numValue = parseInt(value, 10);
+    }
 
     if (numValue < 1 || numValue > 50) return 0;
 
@@ -182,10 +189,10 @@ function parseScore(notation) {
         case 'T':
             return value === '-Bull' ? 0 : numValue * 3;
         case 'S':
-            return numValue;
+            return value === 'Bull' ? 25 : numValue;
         case '':
-            // Single (no prefix)
-            return numValue;
+            // Single (no prefix) - Bull = 25, -Bull would be 50 but requires prefix
+            return value === 'Bull' ? 25 : numValue;
         default:
             return 0;
     }
