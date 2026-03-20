@@ -193,8 +193,13 @@ function renderResultScreen() {
 
     // Determine status
     const { valid } = state.lastResult;
+    const premium = valid && isPremiumCheckout(state.darts, state.target);
 
-    if (valid) {
+    if (premium) {
+        status.textContent = I18n.t('resultPremium');
+        status.className = 'result-status premium';
+        launchConfetti();
+    } else if (valid) {
         status.textContent = I18n.t('resultSuccess');
         status.className = 'result-status optimal';
     } else {
@@ -206,16 +211,16 @@ function renderResultScreen() {
     yourDarts.innerHTML = state.darts.map((dart) => `<span class="dart-item">${dart}</span>`).join('');
 
     // Show premium checkouts
-    const premium = window.PremiumCheckouts[state.target];
-    console.log(`Target: ${state.target}, Premium data:`, premium);
+    const premiumData = window.PremiumCheckouts[state.target];
+    console.log(`Target: ${state.target}, Premium data:`, premiumData);
 
     // V1 Card
     const v1Card = document.getElementById('premium-v1-card');
     const v1Darts = document.getElementById('premium-v1-darts');
-    if (premium && premium.v1) {
+    if (premiumData && premiumData.v1) {
         v1Card.style.display = 'block';
-        v1Darts.innerHTML = renderDartSequence(premium.v1);
-        console.log('V1 displayed:', premium.v1);
+        v1Darts.innerHTML = renderDartSequence(premiumData.v1);
+        console.log('V1 displayed:', premiumData.v1);
     } else {
         v1Card.style.display = 'none';
     }
@@ -223,10 +228,10 @@ function renderResultScreen() {
     // V2 Card
     const v2Card = document.getElementById('premium-v2-card');
     const v2Darts = document.getElementById('premium-v2-darts');
-    if (premium && premium.v2) {
+    if (premiumData && premiumData.v2) {
         v2Card.style.display = 'block';
-        v2Darts.innerHTML = renderDartSequence(premium.v2);
-        console.log('V2 displayed:', premium.v2);
+        v2Darts.innerHTML = renderDartSequence(premiumData.v2);
+        console.log('V2 displayed:', premiumData.v2);
     } else {
         v2Card.style.display = 'none';
     }
@@ -234,10 +239,10 @@ function renderResultScreen() {
     // 2-Dart Card
     const tdCard = document.getElementById('premium-2dart-card');
     const tdDarts = document.getElementById('premium-2dart-darts');
-    if (premium && premium.twoDart) {
+    if (premiumData && premiumData.twoDart) {
         tdCard.style.display = 'block';
-        tdDarts.innerHTML = renderDartSequence(premium.twoDart);
-        console.log('2-Dart displayed:', premium.twoDart);
+        tdDarts.innerHTML = renderDartSequence(premiumData.twoDart);
+        console.log('2-Dart displayed:', premiumData.twoDart);
     } else {
         tdCard.style.display = 'none';
     }
@@ -271,6 +276,38 @@ function renderDartSequence(darts) {
     return darts.map(d => `<span class="dart-item">${d}</span>`).join('');
 }
 
+// Check if the played darts match a premium checkout
+function isPremiumCheckout(darts, target) {
+    const premium = window.PremiumCheckouts[target];
+    if (!premium) return false;
+    const seq = JSON.stringify(darts);
+    return (
+        (premium.v1 && JSON.stringify(premium.v1) === seq) ||
+        (premium.v2 && JSON.stringify(premium.v2) === seq) ||
+        (premium.twoDart && JSON.stringify(premium.twoDart) === seq)
+    );
+}
+
+// Launch confetti animation for premium checkouts
+function launchConfetti() {
+    const colors = ['#ffd700', '#ff6b35', '#2ecc71', '#e74c3c', '#3498db'];
+    const container = document.querySelector('.result-content');
+    for (let i = 0; i < 40; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.cssText = `
+            left: ${Math.random() * 100}%;
+            background-color: ${colors[Math.floor(Math.random() * colors.length)]};
+            animation-delay: ${Math.random() * 0.5}s;
+            animation-duration: ${0.8 + Math.random() * 0.6}s;
+            width: ${6 + Math.random() * 6}px;
+            height: ${6 + Math.random() * 6}px;
+        `;
+        container.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+    }
+}
+
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     // Load Premium Checkouts CSV
@@ -280,7 +317,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(text => {
             const lines = text.trim().split('\n').slice(2); // 2 Header-Zeilen überspringen
             lines.forEach(line => {
-                const cols = line.split(';').map(c => c.trim());
+                const cols = line.split(';').map(c => c.trim().split('/')[0]);
                 const score = parseInt(cols[0]);
                 if (!score) return;
                 const v1 = [cols[1], cols[2], cols[3]].filter(c => c && c !== '-');

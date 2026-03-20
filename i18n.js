@@ -16,7 +16,8 @@ window.I18n = {
             label2DartVariant: '2-Dart',
             nextBtn: 'Next Target',
             resultSuccess: '✓ Done!',
-            resultFail: '✗ Not done'
+            resultFail: '✗ Not done',
+            resultPremium: '⭐ Premium Checkout!'
         },
         de: {
             pageTitle: 'Dart Checkout Übung',
@@ -34,7 +35,8 @@ window.I18n = {
             label2DartVariant: '2-Dart',
             nextBtn: 'Nächstes Ziel',
             resultSuccess: '✓ Geschafft!',
-            resultFail: '✗ Nicht geschafft'
+            resultFail: '✗ Nicht geschafft',
+            resultPremium: '⭐ Du hast einen Premium Checkout gespielt!'
         }
     },
 
