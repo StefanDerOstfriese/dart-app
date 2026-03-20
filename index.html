@@ -38,10 +38,14 @@
         <div id="game-screen" class="screen">
             <div class="game-container">
                 <div class="target-info">
-                    <div class="label" data-i18n="labelCheckout">Checkout</div>
-                    <div class="target-number" id="target-number">—</div>
-                    <div class="label" data-i18n="labelRemaining">Remaining</div>
-                    <div class="remaining-number" id="remaining-number">—</div>
+                    <div id="checkout-group">
+                        <div class="label" data-i18n="labelCheckout">Checkout</div>
+                        <div class="target-number" id="target-number">—</div>
+                    </div>
+                    <div id="remaining-group">
+                        <div class="label" data-i18n="labelRemaining">Remaining</div>
+                        <div class="remaining-number" id="remaining-number">—</div>
+                    </div>
                 </div>
 
                 <div class="dartboard-wrapper">
@@ -57,6 +61,11 @@
                 <div class="game-buttons">
                     <button id="reset-btn" class="btn btn-secondary" data-i18n="resetBtn">Reset Darts</button>
                     <button id="skip-btn" class="btn btn-secondary" data-i18n="skipBtn">Skip Target</button>
+                </div>
+
+                <div class="view-toggles">
+                    <button id="toggle-remaining-btn" class="toggle-btn active">Restpunkte</button>
+                    <button id="toggle-numbers-btn" class="toggle-btn active">Zahlen</button>
                 </div>
             </div>
         </div>

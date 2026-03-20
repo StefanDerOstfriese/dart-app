@@ -261,6 +261,34 @@ h1 {
     width: 100%;
 }
 
+/* View toggles */
+.view-toggles {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.toggle-btn {
+    padding: 6px 14px;
+    border: 1.5px solid var(--border-color);
+    background-color: var(--bg-card);
+    color: var(--text-secondary);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+    border-color: var(--accent-primary);
+    color: var(--text-primary);
+}
+
+.toggle-btn:hover {
+    border-color: var(--accent-primary);
+}
+
 /* Result Screen */
 .result-content {
     padding: 40px 20px;

@@ -5,6 +5,8 @@ const state = {
     remaining: 0,
     lastResult: null,
     gameEnded: false,
+    showRemaining: true,
+    showNumbers: true,
 };
 
 // Get valid checkout targets
@@ -107,6 +109,25 @@ function resetDarts() {
     state.gameEnded = false;
     renderGameScreen();
     renderDarts();
+}
+
+// Toggle remaining display
+function toggleRemaining() {
+    state.showRemaining = !state.showRemaining;
+    document.getElementById('remaining-group').style.visibility =
+        state.showRemaining ? 'visible' : 'hidden';
+    const btn = document.getElementById('toggle-remaining-btn');
+    btn.classList.toggle('active', state.showRemaining);
+}
+
+// Toggle dartboard numbers
+function toggleNumbers() {
+    state.showNumbers = !state.showNumbers;
+    document.querySelectorAll('.dartboard-text').forEach(el => {
+        el.style.visibility = state.showNumbers ? 'visible' : 'hidden';
+    });
+    const btn = document.getElementById('toggle-numbers-btn');
+    btn.classList.toggle('active', state.showNumbers);
 }
 
 // Show result screen
@@ -345,6 +366,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nextBtn) {
         nextBtn.addEventListener('click', nextRound);
     }
+
+    // Toggle buttons
+    document.getElementById('toggle-remaining-btn')?.addEventListener('click', toggleRemaining);
+    document.getElementById('toggle-numbers-btn')?.addEventListener('click', toggleNumbers);
 
     // Dartboard click events
     document.addEventListener('dart-clicked', (e) => {
