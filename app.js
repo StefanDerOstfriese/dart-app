@@ -219,7 +219,7 @@ function renderResultScreen() {
     }
 
     // Show your darts
-    yourDarts.innerHTML = state.darts.map((dart) => `<span class="dart-item">${dart}</span>`).join('');
+    yourDarts.innerHTML = renderDartSequence(state.darts);
 
     // Show premium checkouts
     const premiumData = window.PremiumCheckouts[state.target];
