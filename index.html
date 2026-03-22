@@ -3,102 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="pageTitle">Dart Checkout Practice</title>
+    <title data-i18n="pageTitle">Dart Checkout Trainer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="language-switcher">
-        <button id="lang-toggle-en" class="lang-toggle-btn" title="English">🇬🇧</button>
-        <button id="lang-toggle-de" class="lang-toggle-btn" title="Deutsch">🇩🇪</button>
-    </div>
 
-    <div class="container">
-        <!-- Language Selection Screen -->
-        <div id="lang-screen" class="screen active">
-            <div class="screen-content">
-                <h1>🎯 Dart Checkout Practice</h1>
-                <p class="subtitle">Choose your language / Sprache wählen</p>
-                <div class="lang-buttons">
-                    <button id="lang-en-btn" class="btn btn-secondary lang-btn">🇬🇧 English</button>
-                    <button id="lang-de-btn" class="btn btn-secondary lang-btn">🇩🇪 Deutsch</button>
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="24" cy="24" r="22" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.3"/>
+                        <circle cx="24" cy="24" r="16" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.5"/>
+                        <circle cx="24" cy="24" r="10" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.7"/>
+                        <circle cx="24" cy="24" r="4" fill="#ff5a1f"/>
+                        <!-- Dart -->
+                        <line x1="40" y1="8" x2="27" y2="21" stroke="#ff5a1f" stroke-width="2.5" stroke-linecap="round"/>
+                        <polygon points="40,8 36,9 39,12" fill="#ff5a1f"/>
+                        <line x1="40" y1="8" x2="44" y2="4" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="43" y1="5" x2="46" y2="3" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-main">Dart Checkout</span>
+                    <span class="brand-sub">Trainer</span>
                 </div>
             </div>
+            <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
         </div>
 
-        <!-- Start Screen -->
-        <div id="start-screen" class="screen">
-            <div class="screen-content">
-                <h1 data-i18n="h1">🎯 Dart Checkout Practice</h1>
-                <p class="subtitle" data-i18n="subtitle">Master your double out finishes</p>
-                <button id="start-btn" class="btn btn-primary" data-i18n="startBtn">Start Practice</button>
+        <div class="nav-section">
+            <div class="nav-label" data-i18n="navSectionMenu">Menu</div>
+            <button class="nav-item active" id="nav-train" data-screen="game">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                    <line x1="19" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span data-i18n="navTrain">Train</span>
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="nav-label" data-i18n="navSectionLanguage">Language</div>
+            <div class="lang-toggle-group">
+                <button id="lang-toggle-en" class="lang-toggle-btn" title="English">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span class="lang-code">EN</span>
+                </button>
+                <button id="lang-toggle-de" class="lang-toggle-btn" title="Deutsch">
+                    <span class="lang-flag">🇩🇪</span>
+                    <span class="lang-code">DE</span>
+                </button>
             </div>
         </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-wrapper">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <button class="hamburger" id="hamburger" aria-label="Open menu">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <line x1="3" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="3" y1="16" x2="19" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <h1 class="topbar-title" id="topbar-title" data-i18n="navTrain">Train</h1>
+        </header>
 
         <!-- Game Screen -->
-        <div id="game-screen" class="screen">
-            <div class="game-container">
-                <div class="target-info">
-                    <div id="checkout-group">
-                        <div class="label" data-i18n="labelCheckout">Checkout</div>
-                        <div class="target-number" id="target-number">—</div>
+        <div id="game-screen" class="screen active">
+            <div class="game-layout">
+
+                <!-- Game Header: Stats + Toggles -->
+                <div class="game-header">
+                    <div class="stat-group">
+                        <div class="stat-card" id="checkout-group">
+                            <div class="stat-label" data-i18n="labelCheckout">Checkout</div>
+                            <div class="stat-value accent" id="target-number">—</div>
+                        </div>
+                        <div class="stat-card" id="remaining-group">
+                            <div class="stat-label" data-i18n="labelRemaining">Remaining</div>
+                            <div class="stat-value" id="remaining-number">—</div>
+                        </div>
                     </div>
-                    <div id="remaining-group">
-                        <div class="label" data-i18n="labelRemaining">Remaining</div>
-                        <div class="remaining-number" id="remaining-number">—</div>
+                    <div class="view-toggles">
+                        <button id="toggle-remaining-btn" class="toggle-chip active" data-i18n="toggleRemaining">Remaining</button>
+                        <button id="toggle-numbers-btn" class="toggle-chip active" data-i18n="toggleNumbers">Numbers</button>
                     </div>
                 </div>
 
+                <!-- Dartboard -->
                 <div class="dartboard-wrapper">
                     <svg id="dartboard" viewBox="0 0 500 500" class="dartboard"></svg>
                 </div>
 
-                <div class="darts-display">
-                    <div class="dart-slot" id="dart-0"></div>
-                    <div class="dart-slot" id="dart-1"></div>
-                    <div class="dart-slot" id="dart-2"></div>
+                <!-- Game Footer: Darts + Buttons -->
+                <div class="game-footer">
+                    <div class="darts-display">
+                        <div class="dart-slot" id="dart-0"></div>
+                        <div class="dart-slot" id="dart-1"></div>
+                        <div class="dart-slot" id="dart-2"></div>
+                    </div>
+                    <div class="game-actions">
+                        <button id="reset-btn" class="btn btn-ghost" data-i18n="resetBtn">Reset</button>
+                        <button id="skip-btn" class="btn btn-ghost" data-i18n="skipBtn">Skip</button>
+                    </div>
                 </div>
 
-                <div class="game-buttons">
-                    <button id="reset-btn" class="btn btn-secondary" data-i18n="resetBtn">Reset Darts</button>
-                    <button id="skip-btn" class="btn btn-secondary" data-i18n="skipBtn">Skip Target</button>
-                </div>
-
-                <div class="view-toggles">
-                    <button id="toggle-remaining-btn" class="view-toggle-btn active" data-i18n="toggleRemaining">Remaining</button>
-                    <button id="toggle-numbers-btn" class="view-toggle-btn active" data-i18n="toggleNumbers">Numbers</button>
-                </div>
             </div>
         </div>
 
         <!-- Result Screen -->
         <div id="result-screen" class="screen">
-            <div class="screen-content result-content">
-                <div class="target-info" style="margin-bottom: 20px;">
-                    <div class="label" data-i18n="labelCheckoutTarget">Checkout Target</div>
-                    <div class="target-number" id="result-target-number">—</div>
+            <div class="result-layout">
+
+                <div class="result-header">
+                    <div class="result-target-group">
+                        <div class="stat-label" data-i18n="labelCheckoutTarget">Checkout Target</div>
+                        <div class="stat-value accent" id="result-target-number">—</div>
+                    </div>
+                    <div id="result-status" class="result-badge"></div>
                 </div>
-                <div id="result-status" class="result-status"></div>
+
                 <div class="checkouts-grid">
-                    <div class="checkout-card">
-                        <div class="label" data-i18n="labelYourCheckout">Your Checkout</div>
+                    <div class="checkout-card" id="your-card">
+                        <div class="checkout-label" data-i18n="labelYourCheckout">Your Checkout</div>
                         <div id="result-your-darts" class="checkout-display"></div>
                     </div>
                     <div class="checkout-card" id="premium-v1-card">
-                        <div class="label" data-i18n="labelPremiumV1">Premium V. 1</div>
+                        <div class="checkout-label" data-i18n="labelPremiumV1">Premium V.1</div>
                         <div id="premium-v1-darts" class="checkout-display"></div>
                     </div>
                     <div class="checkout-card" id="premium-v2-card">
-                        <div class="label" data-i18n="labelPremiumV2">Premium V. 2</div>
+                        <div class="checkout-label" data-i18n="labelPremiumV2">Premium V.2</div>
                         <div id="premium-v2-darts" class="checkout-display"></div>
                     </div>
                     <div class="checkout-card" id="premium-2dart-card">
-                        <div class="label" data-i18n="label2DartVariant">2-Dart</div>
+                        <div class="checkout-label" data-i18n="label2DartVariant">2-Dart</div>
                         <div id="premium-2dart-darts" class="checkout-display"></div>
                     </div>
                 </div>
-                <button id="next-btn" class="btn btn-primary" data-i18n="nextBtn">Next Target</button>
+
+                <button id="next-btn" class="btn btn-primary btn-full" data-i18n="nextBtn">Next Target</button>
+
             </div>
         </div>
+
     </div>
 
     <script src="i18n.js"></script>

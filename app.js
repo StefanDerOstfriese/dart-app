@@ -31,6 +31,17 @@ function switchScreen(screenName) {
     state.screen = screenName;
 }
 
+// Sidebar toggle
+function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebar-overlay').classList.add('visible');
+}
+
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('visible');
+}
+
 // Start a new game
 function startGame() {
     const validTargets = getValidCheckoutTargets();
@@ -333,59 +344,30 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch(err => console.error('Error loading Premium_Checkouts.csv:', err));
 
-    // Language selection on first load
+    // Init language
     let savedLang;
     try {
         savedLang = localStorage.getItem('dart-lang');
-    } catch (e) {
-        // localStorage not available
-    }
+    } catch (e) {}
+    switchLanguage(savedLang || 'en');
 
-    if (savedLang) {
-        // Restore saved language and skip to start screen
-        switchLanguage(savedLang);
-        switchScreen('start');
-    } else {
-        // Show language selection screen
-        const langEnBtn = document.getElementById('lang-en-btn');
-        const langDeBtn = document.getElementById('lang-de-btn');
+    // Start game directly
+    startGame();
 
-        if (langEnBtn) {
-            langEnBtn.addEventListener('click', () => {
-                switchLanguage('en');
-                switchScreen('start');
-            });
-        }
+    // Sidebar toggle
+    document.getElementById('hamburger')?.addEventListener('click', openSidebar);
+    document.getElementById('sidebar-close')?.addEventListener('click', closeSidebar);
+    document.getElementById('sidebar-overlay')?.addEventListener('click', closeSidebar);
 
-        if (langDeBtn) {
-            langDeBtn.addEventListener('click', () => {
-                switchLanguage('de');
-                switchScreen('start');
-            });
-        }
-    }
-
-    // Language toggle buttons (top right)
-    const langToggleEn = document.getElementById('lang-toggle-en');
-    const langToggleDe = document.getElementById('lang-toggle-de');
-
-    if (langToggleEn) {
-        langToggleEn.addEventListener('click', () => {
-            switchLanguage('en');
-        });
-    }
-
-    if (langToggleDe) {
-        langToggleDe.addEventListener('click', () => {
-            switchLanguage('de');
-        });
-    }
-
-    // Start button
-    const startBtn = document.getElementById('start-btn');
-    if (startBtn) {
-        startBtn.addEventListener('click', startGame);
-    }
+    // Language toggle buttons (sidebar)
+    document.getElementById('lang-toggle-en')?.addEventListener('click', () => {
+        switchLanguage('en');
+        closeSidebar();
+    });
+    document.getElementById('lang-toggle-de')?.addEventListener('click', () => {
+        switchLanguage('de');
+        closeSidebar();
+    });
 
     // Game buttons
     const resetBtn = document.getElementById('reset-btn');

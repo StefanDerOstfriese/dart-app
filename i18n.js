@@ -1,10 +1,10 @@
 window.I18n = {
     translations: {
         en: {
-            pageTitle: 'Dart Checkout Practice',
-            h1: '🎯 Dart Checkout Practice',
-            subtitle: 'Master your double out finishes',
-            startBtn: 'Start Practice',
+            pageTitle: 'Dart Checkout Trainer',
+            navTrain: 'Train',
+            navSectionMenu: 'Menu',
+            navSectionLanguage: 'Language',
             labelCheckout: 'Checkout',
             labelRemaining: 'Remaining',
             resetBtn: 'Reset Darts',
@@ -22,10 +22,10 @@ window.I18n = {
             toggleNumbers: 'Numbers'
         },
         de: {
-            pageTitle: 'Dart Checkout Übung',
-            h1: '🎯 Dart Checkout Übung',
-            subtitle: 'Meistere deine Double-out Finishes',
-            startBtn: 'Übung starten',
+            pageTitle: 'Dart Checkout Trainer',
+            navTrain: 'Training',
+            navSectionMenu: 'Menü',
+            navSectionLanguage: 'Sprache',
             labelCheckout: 'Checkout',
             labelRemaining: 'Verbleibend',
             resetBtn: 'Darts zurücksetzen',
