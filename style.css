@@ -538,7 +538,6 @@ button {
     min-height: 0;
     padding: 16px;
     gap: 14px;
-    justify-content: center;
 }
 
 .result-header {
