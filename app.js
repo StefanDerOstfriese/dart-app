@@ -34,18 +34,107 @@ function switchScreen(screenName) {
 // Navigate to a section
 function navigateTo(screen) {
     switchScreen(screen);
-    // Update active nav item
     document.querySelectorAll('.nav-item').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.screen === screen);
     });
-    // Update topbar title
     const titleEl = document.getElementById('topbar-title');
     if (titleEl) {
-        const map = { game: 'navTrain', knowhow: 'navKnowhow' };
+        const map = { game: 'navTrain', knowhow: 'navKnowhow', premium: 'navPremium' };
         titleEl.dataset.i18n = map[screen] || 'navTrain';
         titleEl.textContent = I18n.t(map[screen] || 'navTrain');
     }
+    if (screen === 'premium') renderPremiumPage();
     closeSidebar();
+}
+
+// Return CSS class for a dart chip
+function dartChipClass(dart) {
+    if (!dart) return 'chip-single';
+    if (dart.startsWith('T')) return 'chip-treble';
+    if (dart.startsWith('D')) return 'chip-double';
+    if (dart === 'Bull' || dart === 'DB' || dart === 'D-Bull' || dart === 'SB') return 'chip-bull';
+    return 'chip-single';
+}
+
+// Render the Premium Checkouts page
+function renderPremiumPage() {
+    const container = document.getElementById('premium-page-content');
+    if (!container) return;
+
+    const data = window.PremiumCheckouts;
+    if (!data || Object.keys(data).length === 0) {
+        container.innerHTML = `<div class="pp-loading">${I18n.t('pp_loading')}</div>`;
+        return;
+    }
+
+    const ranges = [
+        { key: 'pp_range_big',  min: 141, max: 170 },
+        { key: 'pp_range_high', min: 101, max: 140 },
+        { key: 'pp_range_mid',  min:  61, max: 100 },
+        { key: 'pp_range_low',  min:   2, max:  60 },
+    ];
+
+    container.innerHTML = '';
+
+    ranges.forEach(range => {
+        const scores = Object.keys(data)
+            .map(Number)
+            .filter(s => s >= range.min && s <= range.max)
+            .sort((a, b) => b - a);
+
+        if (scores.length === 0) return;
+
+        const section = document.createElement('div');
+        section.className = 'pp-section';
+        section.innerHTML = `
+            <div class="pp-range-header">
+                <span class="pp-range-title">${I18n.t(range.key)}</span>
+                <span class="pp-range-sub">${range.max} – ${range.min}</span>
+                <span class="pp-count">${scores.length}</span>
+            </div>
+            <div class="pp-grid" id="pp-grid-${range.key}"></div>
+        `;
+
+        const grid = section.querySelector('.pp-grid');
+
+        scores.forEach(score => {
+            const entry = data[score];
+            const card = document.createElement('div');
+            card.className = 'pp-card';
+
+            let variantsHtml = '';
+
+            if (entry.twoDart) {
+                variantsHtml += buildVariantHtml(entry.twoDart, 'td', I18n.t('pp_2dart'));
+            }
+            if (entry.v1) {
+                variantsHtml += buildVariantHtml(entry.v1, 'v1', 'V1');
+            }
+            if (entry.v2) {
+                variantsHtml += buildVariantHtml(entry.v2, 'v2', 'V2');
+            }
+
+            card.innerHTML = `
+                <div class="pp-score">${score}</div>
+                <div class="pp-divider"></div>
+                <div class="pp-variants">${variantsHtml}</div>
+            `;
+
+            grid.appendChild(card);
+        });
+
+        container.appendChild(section);
+    });
+}
+
+function buildVariantHtml(darts, badgeClass, label) {
+    const chips = darts.map(d =>
+        `<span class="pp-chip ${dartChipClass(d)}">${d}</span>`
+    ).join('');
+    return `<div class="pp-variant">
+        <span class="pp-badge ${badgeClass}">${label}</span>
+        <div class="pp-darts">${chips}</div>
+    </div>`;
 }
 
 // Build know-how lists from i18n data
@@ -296,6 +385,7 @@ function switchLanguage(lang) {
     I18n.init(lang);
     I18n.applyTranslations();
     updateLanguageToggleButtons();
+    if (state.screen === 'premium') renderPremiumPage();
 }
 
 // Update active state of language toggle buttons
@@ -397,6 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Nav items
     document.getElementById('nav-train')?.addEventListener('click', () => navigateTo('game'));
+    document.getElementById('nav-premium')?.addEventListener('click', () => navigateTo('premium'));
     document.getElementById('nav-knowhow')?.addEventListener('click', () => navigateTo('knowhow'));
 
     // Sidebar toggle

@@ -54,6 +54,12 @@
                 </svg>
                 <span data-i18n="navTrain">Train</span>
             </button>
+            <button class="nav-item" id="nav-premium" data-screen="premium">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                </svg>
+                <span data-i18n="navPremium">Premium Checkouts</span>
+            </button>
             <button class="nav-item" id="nav-knowhow" data-screen="knowhow">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
@@ -170,6 +176,15 @@
 
                 <button id="next-btn" class="btn btn-primary btn-full" data-i18n="nextBtn">Next Target</button>
 
+            </div>
+        </div>
+
+        <!-- Premium Checkouts Screen -->
+        <div id="premium-screen" class="screen">
+            <div class="premium-layout" id="premium-page-content">
+                <div class="pp-loading" id="pp-loading">
+                    <span data-i18n="pp_loading">Loading…</span>
+                </div>
             </div>
         </div>
 

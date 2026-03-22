@@ -20,6 +20,13 @@ window.I18n = {
             resultPremium: '⭐ Premium Checkout!',
             toggleRemaining: 'Remaining',
             toggleNumbers: 'Numbers',
+            navPremium: 'Premium Checkouts',
+            pp_range_big: 'Big Fish',
+            pp_range_high: 'High',
+            pp_range_mid: 'Mid',
+            pp_range_low: 'Low & 2-Dart',
+            pp_2dart: '2 Darts',
+            pp_loading: 'Loading…',
 
             // Know-How page
             kh_s1_title: 'What is a Checkout?',
@@ -75,6 +82,13 @@ window.I18n = {
             resultPremium: '⭐ Du hast einen Premium Checkout gespielt!',
             toggleRemaining: 'Restpunkte',
             toggleNumbers: 'Zahlen',
+            navPremium: 'Premium Checkouts',
+            pp_range_big: 'Big Fish',
+            pp_range_high: 'Hoch',
+            pp_range_mid: 'Mittel',
+            pp_range_low: 'Niedrig & 2-Dart',
+            pp_2dart: '2 Darts',
+            pp_loading: 'Lädt…',
 
             // Know-How Seite
             kh_s1_title: 'Was ist ein Checkout?',

@@ -653,6 +653,176 @@ button {
 }
 
 /* ───────────────────────────────────────────
+   Premium Checkouts Screen
+─────────────────────────────────────────── */
+.premium-layout {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.premium-layout::-webkit-scrollbar { width: 5px; }
+.premium-layout::-webkit-scrollbar-track { background: transparent; }
+.premium-layout::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 4px; }
+
+.pp-loading {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    padding: 40px;
+    text-align: center;
+}
+
+/* Section */
+.pp-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pp-range-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+}
+
+.pp-range-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.pp-range-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.pp-count {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 8px;
+}
+
+/* Grid of cards */
+.pp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 10px;
+}
+
+/* Individual card */
+.pp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    transition: border-color 0.18s ease;
+}
+
+.pp-card:hover {
+    border-color: rgba(255, 90, 31, 0.25);
+}
+
+.pp-score {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1;
+    color: var(--accent);
+    min-width: 48px;
+    text-align: right;
+    padding-top: 2px;
+    flex-shrink: 0;
+}
+
+.pp-variants {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.pp-variant {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.pp-badge {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    min-width: 28px;
+    text-align: center;
+}
+
+.pp-badge.v1   { background: var(--accent-dim);  color: var(--accent);   border: 1px solid rgba(255,90,31,0.3); }
+.pp-badge.v2   { background: rgba(59,157,255,.12); color: #3b9dff;        border: 1px solid rgba(59,157,255,0.3); }
+.pp-badge.td   { background: var(--gold-dim);    color: var(--gold);     border: 1px solid rgba(255,215,0,0.35); }
+
+.pp-darts {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+/* Dart chips */
+.pp-chip {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    padding: 3px 7px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.pp-chip.chip-treble { background: var(--accent-dim);        color: var(--accent);   border-color: rgba(255,90,31,0.25); }
+.pp-chip.chip-double { background: var(--success-dim);       color: var(--success);  border-color: rgba(34,211,90,0.25); }
+.pp-chip.chip-bull   { background: var(--gold-dim);          color: var(--gold);     border-color: rgba(255,215,0,0.3); }
+.pp-chip.chip-single { background: var(--bg-surface);        color: var(--text-secondary); border-color: var(--border); }
+
+/* divider between score and variants */
+.pp-divider {
+    width: 1px;
+    align-self: stretch;
+    background: var(--border);
+    flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
+    .pp-grid {
+        grid-template-columns: 1fr;
+    }
+    .pp-score {
+        font-size: 1.7rem;
+        min-width: 40px;
+    }
+}
+
+/* ───────────────────────────────────────────
    Know-How Screen
 ─────────────────────────────────────────── */
 .knowhow-layout {
