@@ -31,6 +31,38 @@ function switchScreen(screenName) {
     state.screen = screenName;
 }
 
+// Navigate to a section
+function navigateTo(screen) {
+    switchScreen(screen);
+    // Update active nav item
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.screen === screen);
+    });
+    // Update topbar title
+    const titleEl = document.getElementById('topbar-title');
+    if (titleEl) {
+        const map = { game: 'navTrain', knowhow: 'navKnowhow' };
+        titleEl.dataset.i18n = map[screen] || 'navTrain';
+        titleEl.textContent = I18n.t(map[screen] || 'navTrain');
+    }
+    closeSidebar();
+}
+
+// Build know-how lists from i18n data
+function buildKnowHow() {
+    [
+        { id: 'kh-s2-list', key: 'kh_s2_items' },
+        { id: 'kh-s3-list', key: 'kh_s3_items' },
+        { id: 'kh-s4-list', key: 'kh_s4_items' },
+    ].forEach(({ id, key }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const items = I18n.translations[I18n.currentLang]?.[key] ||
+                      I18n.translations['en'][key] || [];
+        el.innerHTML = items.map(item => `<li>${item}</li>`).join('');
+    });
+}
+
 // Sidebar toggle
 function openSidebar() {
     document.getElementById('sidebar').classList.add('open');
@@ -361,6 +393,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start game directly
     startGame();
+    buildKnowHow();
+
+    // Nav items
+    document.getElementById('nav-train')?.addEventListener('click', () => navigateTo('game'));
+    document.getElementById('nav-knowhow')?.addEventListener('click', () => navigateTo('knowhow'));
 
     // Sidebar toggle
     document.getElementById('hamburger')?.addEventListener('click', openSidebar);

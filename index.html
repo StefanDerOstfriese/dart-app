@@ -54,6 +54,13 @@
                 </svg>
                 <span data-i18n="navTrain">Train</span>
             </button>
+            <button class="nav-item" id="nav-knowhow" data-screen="knowhow">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M12 8v1M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span data-i18n="navKnowhow">Checkout Know-How</span>
+            </button>
         </div>
 
         <div class="sidebar-footer">
@@ -162,6 +169,37 @@
                 </div>
 
                 <button id="next-btn" class="btn btn-primary btn-full" data-i18n="nextBtn">Next Target</button>
+
+            </div>
+        </div>
+
+        <!-- Know-How Screen -->
+        <div id="knowhow-screen" class="screen">
+            <div class="knowhow-layout">
+
+                <div class="kh-section">
+                    <h2 class="kh-heading" data-i18n="kh_s1_title">Was ist ein Checkout?</h2>
+                    <p class="kh-body" data-i18n-html="kh_s1_body"></p>
+                </div>
+
+                <div class="kh-section">
+                    <h2 class="kh-heading" data-i18n="kh_s2_title">Wie erreiche ich einen Checkout?</h2>
+                    <p class="kh-intro" data-i18n="kh_s2_intro"></p>
+                    <ul class="kh-list" id="kh-s2-list"></ul>
+                </div>
+
+                <div class="kh-section">
+                    <h2 class="kh-heading" data-i18n="kh_s3_title">Was sind Premium Checkouts?</h2>
+                    <p class="kh-body" data-i18n-html="kh_s3_body"></p>
+                    <p class="kh-examples-title" data-i18n="kh_s3_examples_title"></p>
+                    <ul class="kh-list kh-examples" id="kh-s3-list"></ul>
+                    <p class="kh-body kh-outro" data-i18n-html="kh_s3_outro"></p>
+                </div>
+
+                <div class="kh-section">
+                    <h2 class="kh-heading" data-i18n="kh_s4_title">Worauf sollte ich achten?</h2>
+                    <ul class="kh-list" id="kh-s4-list"></ul>
+                </div>
 
             </div>
         </div>
