@@ -208,14 +208,14 @@ function renderResultScreen() {
 
     if (premium) {
         status.textContent = I18n.t('resultPremium');
-        status.className = 'result-status premium';
+        status.className = 'result-status-banner premium';
         launchConfetti();
     } else if (valid) {
         status.textContent = I18n.t('resultSuccess');
-        status.className = 'result-status optimal';
+        status.className = 'result-status-banner optimal';
     } else {
         status.textContent = I18n.t('resultFail');
-        status.className = 'result-status invalid';
+        status.className = 'result-status-banner invalid';
     }
 
     // Show your darts
@@ -301,18 +301,26 @@ function isPremiumCheckout(darts, target) {
 
 // Launch confetti animation for premium checkouts
 function launchConfetti() {
-    const colors = ['#ffd700', '#ff6b35', '#2ecc71', '#e74c3c', '#3498db'];
-    const container = document.querySelector('.result-content');
-    for (let i = 0; i < 40; i++) {
+    const colors = ['#ffd700', '#ff5a1f', '#22d35a', '#ff3b5c', '#3b9dff', '#c084fc', '#ffffff'];
+    const container = document.querySelector('.result-layout');
+    if (!container) return;
+    container.style.position = 'relative';
+    container.style.overflow = 'hidden';
+
+    for (let i = 0; i < 80; i++) {
         const el = document.createElement('div');
         el.className = 'confetti-piece';
+        const size = 5 + Math.random() * 8;
+        const isCircle = Math.random() > 0.5;
         el.style.cssText = `
             left: ${Math.random() * 100}%;
             background-color: ${colors[Math.floor(Math.random() * colors.length)]};
-            animation-delay: ${Math.random() * 0.5}s;
-            animation-duration: ${0.8 + Math.random() * 0.6}s;
-            width: ${6 + Math.random() * 6}px;
-            height: ${6 + Math.random() * 6}px;
+            animation-delay: ${Math.random() * 0.8}s;
+            animation-duration: ${1.2 + Math.random() * 1}s;
+            width: ${size}px;
+            height: ${isCircle ? size : size * 0.4}px;
+            border-radius: ${isCircle ? '50%' : '1px'};
+            opacity: 0.9;
         `;
         container.appendChild(el);
         el.addEventListener('animationend', () => el.remove());
