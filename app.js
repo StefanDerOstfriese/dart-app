@@ -526,6 +526,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggle-remaining-btn')?.addEventListener('click', toggleRemaining);
     document.getElementById('toggle-numbers-btn')?.addEventListener('click', toggleNumbers);
 
+    // Internal nav links (e.g. Know-How → Premium)
+    document.addEventListener('click', (e) => {
+        const link = e.target.closest('[data-nav]');
+        if (link) navigateTo(link.dataset.nav);
+    });
+
     // Dartboard click events
     document.addEventListener('dart-clicked', (e) => {
         const { notation, points } = e.detail;

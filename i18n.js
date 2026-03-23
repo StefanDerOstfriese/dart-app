@@ -51,7 +51,7 @@ window.I18n = {
                 '<strong>160:</strong> T20 → T20 → D20',
                 '<strong>121:</strong> T20 → T11 → D14 — a tricky but elegant route'
             ],
-            kh_s3_outro: 'A premium checkout often follows a "setup dart" strategy: the first dart clears the path to a known, reliable double.',
+            kh_s3_outro: 'A premium checkout often follows a "setup dart" strategy: the first dart clears the path to a known, reliable double. Browse the complete list on our <a class="kh-link" data-nav="premium">Premium Checkouts</a> page.',
 
             kh_s4_title: 'What to watch out for',
             kh_s4_items: [
@@ -113,7 +113,7 @@ window.I18n = {
                 '<strong>160:</strong> T20 → T20 → D20',
                 '<strong>121:</strong> T20 → T11 → D14 — eine knifflige, aber elegante Route'
             ],
-            kh_s3_outro: 'Ein Premium Checkout folgt oft dem Prinzip des „Setup-Darts": Der erste Dart bereitet den Weg zu einem bekannten, zuverlässigen Double.',
+            kh_s3_outro: 'Ein Premium Checkout folgt oft dem Prinzip des „Setup-Darts": Der erste Dart bereitet den Weg zu einem bekannten, zuverlässigen Double. Die vollständige Übersicht findest du auf unserer Seite <a class="kh-link" data-nav="premium">Premium Checkouts</a>.',
 
             kh_s4_title: 'Worauf sollte ich achten?',
             kh_s4_items: [
