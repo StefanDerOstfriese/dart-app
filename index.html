@@ -11,20 +11,21 @@
 </head>
 <body>
 
-    <!-- Sidebar Overlay (mobile) -->
-    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+    <!-- Mobile menu overlay -->
+    <div class="menu-overlay" id="menu-overlay"></div>
 
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-brand">
+    <!-- Top Navigation -->
+    <header class="topnav" id="topnav">
+        <div class="topnav-inner">
+
+            <!-- Brand (left) -->
+            <div class="topnav-brand">
                 <div class="logo-icon">
                     <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="24" cy="24" r="22" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.3"/>
                         <circle cx="24" cy="24" r="16" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.5"/>
                         <circle cx="24" cy="24" r="10" stroke="#ff5a1f" stroke-width="2" fill="none" opacity="0.7"/>
                         <circle cx="24" cy="24" r="4" fill="#ff5a1f"/>
-                        <!-- Dart -->
                         <line x1="40" y1="8" x2="27" y2="21" stroke="#ff5a1f" stroke-width="2.5" stroke-linecap="round"/>
                         <polygon points="40,8 36,9 39,12" fill="#ff5a1f"/>
                         <line x1="40" y1="8" x2="44" y2="4" stroke="#e0e0e0" stroke-width="1.5" stroke-linecap="round"/>
@@ -36,74 +37,106 @@
                     <span class="brand-sub">Trainer</span>
                 </div>
             </div>
-            <button class="sidebar-close" id="sidebar-close" aria-label="Close menu">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <line x1="4" y1="4" x2="16" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="16" y1="4" x2="4" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </button>
-        </div>
 
-        <div class="nav-section">
-            <button class="nav-item active" id="nav-train" data-screen="game">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
-                    <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                    <line x1="19" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <span data-i18n="navTrain">Train</span>
-            </button>
-            <button class="nav-item" id="nav-knowhow" data-screen="knowhow">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M12 8v1M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                <span data-i18n="navKnowhow">Checkout Know-How</span>
-            </button>
-            <button class="nav-item" id="nav-premium" data-screen="premium">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                </svg>
-                <span data-i18n="navPremium">Premium Checkouts</span>
-            </button>
-        </div>
-
-        <div class="sidebar-footer">
-            <div class="nav-label" data-i18n="navSectionLanguage">Language</div>
-            <div class="lang-toggle-group">
-                <button id="lang-toggle-en" class="lang-toggle-btn" title="English">
-                    <span class="lang-flag">🇬🇧</span>
-                    <span class="lang-code">EN</span>
+            <!-- Nav links (center, desktop) -->
+            <nav class="topnav-links">
+                <button class="nav-item active" id="nav-train" data-screen="game">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        <line x1="19" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span data-i18n="navTrain">Train</span>
                 </button>
-                <button id="lang-toggle-de" class="lang-toggle-btn" title="Deutsch">
-                    <span class="lang-flag">🇩🇪</span>
-                    <span class="lang-code">DE</span>
+                <button class="nav-item" id="nav-knowhow" data-screen="knowhow">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 8v1M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span data-i18n="navKnowhow">Checkout Know-How</span>
+                </button>
+                <button class="nav-item" id="nav-premium" data-screen="premium">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span data-i18n="navPremium">Premium Checkouts</span>
+                </button>
+            </nav>
+
+            <!-- Actions (right) -->
+            <div class="topnav-actions">
+                <div class="lang-toggle-group topnav-lang">
+                    <button class="lang-toggle-btn" data-lang="en" title="English">
+                        <span class="lang-flag">🇬🇧</span>
+                        <span class="lang-code">EN</span>
+                    </button>
+                    <button class="lang-toggle-btn" data-lang="de" title="Deutsch">
+                        <span class="lang-flag">🇩🇪</span>
+                        <span class="lang-code">DE</span>
+                    </button>
+                </div>
+                <button class="hamburger" id="hamburger" aria-label="Open menu">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                        <line x1="3" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="3" y1="16" x2="19" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
                 </button>
             </div>
+
         </div>
-    </nav>
+
+        <!-- Mobile dropdown menu -->
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-menu-inner">
+                <button class="nav-item" data-screen="game">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
+                        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        <line x1="19" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span data-i18n="navTrain">Train</span>
+                </button>
+                <button class="nav-item" data-screen="knowhow">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M12 8v1M12 11v5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <span data-i18n="navKnowhow">Checkout Know-How</span>
+                </button>
+                <button class="nav-item" data-screen="premium">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span data-i18n="navPremium">Premium Checkouts</span>
+                </button>
+                <div class="mobile-menu-footer">
+                    <div class="nav-label" data-i18n="navSectionLanguage">Language</div>
+                    <div class="lang-toggle-group">
+                        <button class="lang-toggle-btn" data-lang="en" title="English">
+                            <span class="lang-flag">🇬🇧</span>
+                            <span class="lang-code">EN</span>
+                        </button>
+                        <button class="lang-toggle-btn" data-lang="de" title="Deutsch">
+                            <span class="lang-flag">🇩🇪</span>
+                            <span class="lang-code">DE</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </header>
 
     <!-- Main Content -->
     <div class="main-wrapper">
-
-        <!-- Top Bar -->
-        <header class="topbar">
-            <button class="hamburger" id="hamburger" aria-label="Open menu">
-                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <line x1="3" y1="6" x2="19" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <line x1="3" y1="16" x2="19" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </button>
-            <h1 class="topbar-title" id="topbar-title" data-i18n="navTrain">Train</h1>
-        </header>
 
         <!-- Game Screen -->
         <div id="game-screen" class="screen active">
             <div class="game-layout">
 
-                <!-- Game Header: Stats + Toggles -->
                 <div class="game-header">
                     <div class="stat-group">
                         <div class="stat-card" id="checkout-group">
@@ -121,12 +154,10 @@
                     </div>
                 </div>
 
-                <!-- Dartboard -->
                 <div class="dartboard-wrapper">
                     <svg id="dartboard" viewBox="0 0 500 500" class="dartboard"></svg>
                 </div>
 
-                <!-- Game Footer: Darts + Buttons -->
                 <div class="game-footer">
                     <div class="darts-display">
                         <div class="dart-slot" id="dart-0"></div>

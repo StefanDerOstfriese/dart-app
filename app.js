@@ -37,14 +37,8 @@ function navigateTo(screen) {
     document.querySelectorAll('.nav-item').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.screen === screen);
     });
-    const titleEl = document.getElementById('topbar-title');
-    if (titleEl) {
-        const map = { game: 'navTrain', knowhow: 'navKnowhow', premium: 'navPremium' };
-        titleEl.dataset.i18n = map[screen] || 'navTrain';
-        titleEl.textContent = I18n.t(map[screen] || 'navTrain');
-    }
     if (screen === 'premium') renderPremiumPage();
-    closeSidebar();
+    closeMenu();
 }
 
 // Return CSS class for a dart chip
@@ -152,15 +146,15 @@ function buildKnowHow() {
     });
 }
 
-// Sidebar toggle
-function openSidebar() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('sidebar-overlay').classList.add('visible');
+// Mobile menu toggle
+function openMenu() {
+    document.getElementById('mobile-menu').classList.add('open');
+    document.getElementById('menu-overlay').classList.add('visible');
 }
 
-function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebar-overlay').classList.remove('visible');
+function closeMenu() {
+    document.getElementById('mobile-menu').classList.remove('open');
+    document.getElementById('menu-overlay').classList.remove('visible');
 }
 
 // Start a new game
@@ -388,20 +382,12 @@ function switchLanguage(lang) {
     if (state.screen === 'premium') renderPremiumPage();
 }
 
-// Update active state of language toggle buttons
+// Update active state of all language toggle buttons
 function updateLanguageToggleButtons() {
-    const enBtn = document.getElementById('lang-toggle-en');
-    const deBtn = document.getElementById('lang-toggle-de');
-
-    if (enBtn && deBtn) {
-        if (I18n.currentLang === 'en') {
-            enBtn.classList.add('active');
-            deBtn.classList.remove('active');
-        } else {
-            enBtn.classList.remove('active');
-            deBtn.classList.add('active');
-        }
-    }
+    document.querySelectorAll('.lang-toggle-btn[data-lang="en"]').forEach(btn =>
+        btn.classList.toggle('active', I18n.currentLang === 'en'));
+    document.querySelectorAll('.lang-toggle-btn[data-lang="de"]').forEach(btn =>
+        btn.classList.toggle('active', I18n.currentLang === 'de'));
 }
 
 // Helper function to render dart sequence
@@ -485,25 +471,25 @@ document.addEventListener('DOMContentLoaded', () => {
     startGame();
     buildKnowHow();
 
-    // Nav items
+    // Desktop nav items
     document.getElementById('nav-train')?.addEventListener('click', () => navigateTo('game'));
-    document.getElementById('nav-premium')?.addEventListener('click', () => navigateTo('premium'));
     document.getElementById('nav-knowhow')?.addEventListener('click', () => navigateTo('knowhow'));
+    document.getElementById('nav-premium')?.addEventListener('click', () => navigateTo('premium'));
 
-    // Sidebar toggle
-    document.getElementById('hamburger')?.addEventListener('click', openSidebar);
-    document.getElementById('sidebar-close')?.addEventListener('click', closeSidebar);
-    document.getElementById('sidebar-overlay')?.addEventListener('click', closeSidebar);
+    // Mobile nav items (inside dropdown)
+    document.querySelectorAll('.mobile-menu .nav-item[data-screen]').forEach(btn => {
+        btn.addEventListener('click', () => navigateTo(btn.dataset.screen));
+    });
 
-    // Language toggle buttons (sidebar)
-    document.getElementById('lang-toggle-en')?.addEventListener('click', () => {
-        switchLanguage('en');
-        closeSidebar();
-    });
-    document.getElementById('lang-toggle-de')?.addEventListener('click', () => {
-        switchLanguage('de');
-        closeSidebar();
-    });
+    // Menu toggle
+    document.getElementById('hamburger')?.addEventListener('click', openMenu);
+    document.getElementById('menu-overlay')?.addEventListener('click', closeMenu);
+
+    // Language toggle buttons (all — desktop + mobile)
+    document.querySelectorAll('.lang-toggle-btn[data-lang="en"]').forEach(btn =>
+        btn.addEventListener('click', () => { switchLanguage('en'); closeMenu(); }));
+    document.querySelectorAll('.lang-toggle-btn[data-lang="de"]').forEach(btn =>
+        btn.addEventListener('click', () => { switchLanguage('de'); closeMenu(); }));
 
     // Game buttons
     const resetBtn = document.getElementById('reset-btn');
