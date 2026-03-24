@@ -338,7 +338,6 @@ function renderResultScreen() {
 
     // Show premium checkouts
     const premiumData = window.PremiumCheckouts[state.target];
-    console.log(`Target: ${state.target}, Premium data:`, premiumData);
 
     // V1 Card
     const v1Card = document.getElementById('premium-v1-card');
@@ -346,7 +345,6 @@ function renderResultScreen() {
     if (premiumData && premiumData.v1) {
         v1Card.style.display = 'block';
         v1Darts.innerHTML = renderDartSequence(premiumData.v1);
-        console.log('V1 displayed:', premiumData.v1);
     } else {
         v1Card.style.display = 'none';
     }
@@ -357,7 +355,6 @@ function renderResultScreen() {
     if (premiumData && premiumData.v2) {
         v2Card.style.display = 'block';
         v2Darts.innerHTML = renderDartSequence(premiumData.v2);
-        console.log('V2 displayed:', premiumData.v2);
     } else {
         v2Card.style.display = 'none';
     }
@@ -368,7 +365,6 @@ function renderResultScreen() {
     if (premiumData && premiumData.twoDart) {
         tdCard.style.display = 'block';
         tdDarts.innerHTML = renderDartSequence(premiumData.twoDart);
-        console.log('2-Dart displayed:', premiumData.twoDart);
     } else {
         tdCard.style.display = 'none';
     }
@@ -392,7 +388,7 @@ function updateLanguageToggleButtons() {
 
 // Helper function to render dart sequence
 function renderDartSequence(darts) {
-    return darts.map(d => `<span class="dart-item">${d}</span>`).join('');
+    return darts.map(d => `<span class="dart-item ${dartChipClass(d)}">${d}</span>`).join('');
 }
 
 // Check if the played darts match a premium checkout
@@ -456,7 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     twoDart: tdRaw.length > 0 ? tdRaw : null,
                 };
             });
-            console.log('Premium Checkouts loaded:', Object.keys(window.PremiumCheckouts).length, 'scores');
         })
         .catch(err => console.error('Error loading Premium_Checkouts.csv:', err));
 

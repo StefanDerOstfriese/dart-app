@@ -52,8 +52,9 @@ body {
     font-family: 'DM Sans', sans-serif;
     background-color: var(--bg-base);
     color: var(--text-primary);
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
 }
 
 button {
@@ -63,6 +64,17 @@ button {
     font-family: inherit;
     font-size: inherit;
     color: inherit;
+    touch-action: manipulation;
+}
+
+/* Focus styles for keyboard navigation */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible) {
+    outline: none;
 }
 
 /* ───────────────────────────────────────────
@@ -163,6 +175,10 @@ button {
     border-color: rgba(255, 90, 31, 0.2);
 }
 
+.nav-item:active {
+    transform: scale(0.96);
+}
+
 .nav-icon {
     width: 16px;
     height: 16px;
@@ -189,7 +205,8 @@ button {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    padding: 5px 8px;
+    padding: 8px 12px;
+    min-height: 36px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     background: var(--bg-card);
@@ -209,6 +226,10 @@ button {
     border-color: var(--accent);
     background: var(--accent-dim);
     color: var(--accent);
+}
+
+.lang-toggle-btn:active {
+    transform: scale(0.95);
 }
 
 .lang-flag { font-size: 0.9rem; }
@@ -369,9 +390,9 @@ button {
 }
 
 .stat-label {
-    font-size: 0.68rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin-bottom: 2px;
@@ -417,6 +438,10 @@ button {
     border-color: var(--accent);
     background: var(--accent-dim);
     color: var(--accent);
+}
+
+.toggle-chip:active {
+    transform: scale(0.95);
 }
 
 /* Dartboard */
@@ -523,6 +548,11 @@ button {
     transform: translateY(-1px);
 }
 
+.btn-primary:active {
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
 .btn-ghost {
     background: var(--bg-card);
     color: var(--text-secondary);
@@ -532,6 +562,11 @@ button {
 .btn-ghost:hover {
     border-color: var(--border-hover);
     color: var(--text-primary);
+}
+
+.btn-ghost:active {
+    transform: scale(0.97);
+    opacity: 0.8;
 }
 
 .btn-full {
@@ -546,6 +581,7 @@ button {
     display: flex;
     flex-direction: column;
     min-height: 0;
+    overflow-y: auto;
     padding: 16px;
     gap: 14px;
     max-width: 900px;
@@ -653,16 +689,19 @@ button {
 
 .dart-item {
     padding: 5px 10px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
     font-size: 0.9rem;
-    color: var(--accent);
     width: 100%;
     text-align: center;
+    border: 1px solid transparent;
 }
+
+.dart-item.chip-treble { background: var(--accent-dim);   color: var(--accent);   border-color: rgba(255,90,31,0.25); }
+.dart-item.chip-double { background: var(--success-dim);  color: var(--success);  border-color: rgba(34,211,90,0.25); }
+.dart-item.chip-bull   { background: var(--gold-dim);     color: var(--gold);     border-color: rgba(255,215,0,0.3); }
+.dart-item.chip-single { background: var(--bg-surface);   color: var(--text-secondary); border-color: var(--border); }
 
 /* ───────────────────────────────────────────
    Premium Checkouts Screen
@@ -1018,6 +1057,17 @@ button {
     .pp-score {
         font-size: 1.7rem;
         min-width: 40px;
+    }
+}
+
+/* ───────────────────────────────────────────
+   Reduced Motion
+─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
 
