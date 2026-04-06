@@ -40,6 +40,12 @@
 
             <!-- Nav links (center, desktop) -->
             <nav class="topnav-links">
+                <button class="nav-item" id="nav-play" data-screen="play-setup">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <polygon points="6,3 20,12 6,21" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span data-i18n="navPlay">Play</span>
+                </button>
                 <button class="nav-item active" id="nav-train" data-screen="game">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
@@ -90,6 +96,12 @@
         <!-- Mobile dropdown menu -->
         <div class="mobile-menu" id="mobile-menu">
             <div class="mobile-menu-inner">
+                <button class="nav-item" data-screen="play-setup">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <polygon points="6,3 20,12 6,21" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                    </svg>
+                    <span data-i18n="navPlay">Play</span>
+                </button>
                 <button class="nav-item" data-screen="game">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
@@ -216,6 +228,95 @@
                 <div class="pp-loading" id="pp-loading">
                     <span data-i18n="pp_loading">Loading…</span>
                 </div>
+            </div>
+        </div>
+
+        <!-- Play Setup Screen -->
+        <div id="play-setup-screen" class="screen">
+            <div class="setup-layout">
+
+                <div class="setup-header">
+                    <h1 class="setup-title" data-i18n="setupTitle">New Game</h1>
+                </div>
+
+                <div class="setup-section">
+                    <div class="setup-label" data-i18n="setupMode">Game Mode</div>
+                    <div class="setup-chips" id="setup-mode-chips">
+                        <button class="setup-chip" data-mode="301">301</button>
+                        <button class="setup-chip active" data-mode="501">501</button>
+                        <button class="setup-chip" data-mode="701">701</button>
+                        <button class="setup-chip" data-mode="1001">1001</button>
+                    </div>
+                </div>
+
+                <div class="setup-section">
+                    <div class="setup-section-row">
+                        <div class="setup-label" data-i18n="setupPlayers">Players</div>
+                        <button class="btn btn-ghost btn-sm" id="add-player-btn" data-i18n="setupAddPlayer">+ Add Player</button>
+                    </div>
+                    <div class="setup-players" id="setup-players"></div>
+                </div>
+
+                <div class="setup-footer">
+                    <button class="btn btn-primary btn-full" id="start-x01-btn" data-i18n="setupStart">Start Game</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Play Game Screen (x01) -->
+        <div id="play-game-screen" class="screen">
+            <div class="x01-layout">
+
+                <div class="x01-scoreboard" id="x01-scoreboard"></div>
+
+                <div class="dartboard-wrapper">
+                    <svg id="dartboard-x01" viewBox="0 0 600 600" class="dartboard"></svg>
+                </div>
+
+                <div class="x01-footer">
+                    <div class="darts-display" id="x01-darts-row">
+                        <div class="dart-slot" id="x01-dart-0"></div>
+                        <div class="dart-slot" id="x01-dart-1"></div>
+                        <div class="dart-slot" id="x01-dart-2"></div>
+                    </div>
+                    <div class="x01-turn-info">
+                        <div class="x01-pts-value" id="x01-turn-score">0</div>
+                        <div class="x01-pts-label" data-i18n="x01Pts">pts</div>
+                    </div>
+                    <div class="game-actions">
+                        <button class="btn btn-ghost" id="x01-undo-btn" data-i18n="x01Undo">Undo</button>
+                        <button class="btn btn-primary" id="x01-next-btn" disabled data-i18n="x01Next">Next →</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Play Result Screen -->
+        <div id="play-result-screen" class="screen">
+            <div class="play-result-layout">
+
+                <div class="winner-display">
+                    <svg class="winner-trophy" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 8h24v20a12 12 0 01-24 0V8z" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M10 8h10M44 8h10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M10 12C10 12 7 15 7 20a8 8 0 008 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M54 12C54 12 57 15 57 20a8 8 0 01-8 8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="32" y1="40" x2="32" y2="50" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M24 58h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                        <path d="M26 50a6 6 0 0112 0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                    </svg>
+                    <div class="winner-label" data-i18n="winnerLabel">Winner!</div>
+                    <div class="winner-name" id="winner-name"></div>
+                    <div class="winner-game" id="winner-game"></div>
+                </div>
+
+                <div class="play-result-actions">
+                    <button class="btn btn-ghost btn-full" id="play-again-btn" data-i18n="playAgain">Play Again</button>
+                    <button class="btn btn-primary btn-full" id="new-game-btn" data-i18n="newGame">New Game</button>
+                </div>
+
             </div>
         </div>
 

@@ -54,8 +54,8 @@ function makeAnnularWedge(cx, cy, r1, r2, startDeg, endDeg) {
     ].join(' ');
 }
 
-function generateDartboard() {
-    const svg = document.getElementById('dartboard');
+function generateDartboard(targetId = 'dartboard') {
+    const svg = document.getElementById(targetId);
     if (!svg) return;
 
     svg.innerHTML = '';
@@ -182,28 +182,25 @@ function generateDartboard() {
     bullseyeCircle.setAttribute('data-type', 'bullseye');
     svg.appendChild(bullseyeCircle);
 
-    // Add click event listeners
-    addDartboardClickListeners();
+    // Add click event listeners via delegation on the SVG itself
+    addDartboardClickListeners(svg);
 }
 
-function addDartboardClickListeners() {
-    const segments = document.querySelectorAll('.dartboard-segment');
-    segments.forEach((segment) => {
-        segment.addEventListener('click', (e) => {
-            const notation = segment.getAttribute('data-notation');
-            const points = Checkouts.parseScore(notation);
-
-            const event = new CustomEvent('dart-clicked', {
-                detail: {
-                    notation,
-                    points,
-                },
-            });
-
-            document.dispatchEvent(event);
-        });
+function addDartboardClickListeners(svgEl) {
+    svgEl.addEventListener('click', (e) => {
+        const segment = e.target.closest('.dartboard-segment');
+        if (!segment) return;
+        const notation = segment.getAttribute('data-notation');
+        if (!notation) return;
+        const points = Checkouts.parseScore(notation);
+        document.dispatchEvent(new CustomEvent('dart-clicked', {
+            detail: { notation, points },
+        }));
     });
 }
 
-// Initialize dartboard
-document.addEventListener('DOMContentLoaded', generateDartboard);
+// Initialize dartboard(s)
+document.addEventListener('DOMContentLoaded', () => {
+    generateDartboard('dartboard');
+    generateDartboard('dartboard-x01');
+});

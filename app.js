@@ -34,8 +34,10 @@ function switchScreen(screenName) {
 // Navigate to a section
 function navigateTo(screen) {
     switchScreen(screen);
+    // 'play-game' and 'play-result' map back to 'play-setup' nav item
+    const navScreen = (screen === 'play-game' || screen === 'play-result') ? 'play-setup' : screen;
     document.querySelectorAll('.nav-item').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.screen === screen);
+        btn.classList.toggle('active', btn.dataset.screen === navScreen);
     });
     if (screen === 'premium') renderPremiumPage();
     closeMenu();
@@ -403,6 +405,289 @@ function isPremiumCheckout(darts, target) {
     );
 }
 
+// ─────────────────────────────────────────────────────────────────────
+//  x01 GAME ENGINE
+// ─────────────────────────────────────────────────────────────────────
+
+const x01State = {
+    active: false,
+    startingScore: 501,
+    players: [],           // [{id, name, score}]
+    currentPlayerIdx: 0,
+    currentDarts: [],      // notations thrown this turn (max 3)
+    turnStartScore: 0,     // player's score at start of turn (for bust reset)
+    isBust: false,
+    gameOver: false,
+    winner: null,
+};
+
+// Temporary setup form data (persists between setup visits)
+const x01SetupData = {
+    startingScore: 501,
+    playerNames: ['Player 1', 'Player 2'],
+};
+
+// ─── Setup screen ────────────────────────────────────────────────────
+
+function initX01Setup() {
+    renderSetupPlayers();
+    document.querySelectorAll('.setup-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.dataset.mode === String(x01SetupData.startingScore));
+    });
+}
+
+function renderSetupPlayers() {
+    const container = document.getElementById('setup-players');
+    if (!container) return;
+    container.innerHTML = '';
+
+    x01SetupData.playerNames.forEach((name, idx) => {
+        const card = document.createElement('div');
+        card.className = 'setup-player-card';
+        card.innerHTML = `
+            <span class="setup-player-num">${idx + 1}</span>
+            <input
+                class="setup-player-name-input"
+                type="text"
+                value="${name.replace(/"/g, '&quot;')}"
+                maxlength="20"
+                placeholder="Player ${idx + 1}"
+                data-idx="${idx}"
+            />
+            ${x01SetupData.playerNames.length > 1 ? `
+                <button class="setup-player-remove" data-idx="${idx}" aria-label="Remove player">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <line x1="2" y1="2" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="12" y1="2" x2="2" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            ` : ''}
+        `;
+        container.appendChild(card);
+    });
+
+    container.querySelectorAll('.setup-player-name-input').forEach(input => {
+        input.addEventListener('input', (e) => {
+            const idx = parseInt(e.target.dataset.idx);
+            x01SetupData.playerNames[idx] = e.target.value;
+        });
+    });
+
+    container.querySelectorAll('.setup-player-remove').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            x01SetupData.playerNames.splice(idx, 1);
+            renderSetupPlayers();
+        });
+    });
+
+    const addBtn = document.getElementById('add-player-btn');
+    if (addBtn) addBtn.disabled = x01SetupData.playerNames.length >= 4;
+}
+
+// ─── Game start ──────────────────────────────────────────────────────
+
+function startX01Game() {
+    const names = x01SetupData.playerNames.map(n => n.trim()).filter(n => n);
+    if (!names.length) return;
+
+    x01State.active = true;
+    x01State.startingScore = x01SetupData.startingScore;
+    x01State.players = names.map((name, i) => ({
+        id: i,
+        name: name || `Player ${i + 1}`,
+        score: x01SetupData.startingScore,
+    }));
+    x01State.currentPlayerIdx = 0;
+    x01State.currentDarts = [];
+    x01State.turnStartScore = x01State.players[0].score;
+    x01State.isBust = false;
+    x01State.gameOver = false;
+    x01State.winner = null;
+
+    renderX01Screen();
+    navigateTo('play-game');
+}
+
+// ─── Dart input ──────────────────────────────────────────────────────
+
+function x01AddDart(notation) {
+    if (x01State.gameOver) return;
+    if (x01State.isBust) return;
+    if (x01State.currentDarts.length >= 3) return;
+
+    const player = x01State.players[x01State.currentPlayerIdx];
+    const points = Checkouts.parseScore(notation);
+    const newScore = player.score - points;
+
+    x01State.currentDarts.push(notation);
+
+    // Check bust: below 0 or exactly 1
+    if (newScore < 0 || newScore === 1) {
+        x01State.isBust = true;
+        // Show would-be score briefly, then will reset on Next
+        player.score = newScore;
+        renderX01Screen();
+        x01EnableNext(true);
+        return;
+    }
+
+    // Check win: 0 with a double
+    if (newScore === 0) {
+        if (Checkouts.isDouble(notation)) {
+            player.score = 0;
+            x01State.gameOver = true;
+            x01State.winner = player;
+            renderX01Screen();
+            setTimeout(() => {
+                renderX01WinnerScreen(player);
+                launchConfetti();
+                navigateTo('play-result');
+            }, 700);
+            return;
+        } else {
+            // Hit 0 but not on a double → bust
+            x01State.isBust = true;
+            player.score = newScore;
+            renderX01Screen();
+            x01EnableNext(true);
+            return;
+        }
+    }
+
+    player.score = newScore;
+    renderX01Screen();
+
+    if (x01State.currentDarts.length === 3) {
+        x01EnableNext(true);
+    }
+}
+
+function x01UndoDart() {
+    if (!x01State.currentDarts.length) return;
+
+    x01State.currentDarts.pop();
+    x01State.isBust = false;
+
+    const player = x01State.players[x01State.currentPlayerIdx];
+    const turnScore = x01State.currentDarts.reduce(
+        (sum, n) => sum + Checkouts.parseScore(n), 0
+    );
+    player.score = x01State.turnStartScore - turnScore;
+
+    renderX01Screen();
+    x01EnableNext(x01State.currentDarts.length >= 3);
+}
+
+function x01EnableNext(enabled) {
+    const btn = document.getElementById('x01-next-btn');
+    if (btn) btn.disabled = !enabled;
+}
+
+// ─── Turn management ─────────────────────────────────────────────────
+
+function x01NextPlayer() {
+    if (x01State.gameOver) return;
+
+    const player = x01State.players[x01State.currentPlayerIdx];
+
+    // On bust: reset to score before this turn
+    if (x01State.isBust) {
+        player.score = x01State.turnStartScore;
+    }
+
+    // Advance
+    x01State.currentPlayerIdx = (x01State.currentPlayerIdx + 1) % x01State.players.length;
+    x01State.currentDarts = [];
+    x01State.isBust = false;
+    x01State.turnStartScore = x01State.players[x01State.currentPlayerIdx].score;
+
+    x01EnableNext(false);
+    renderX01Screen();
+}
+
+function restartX01Game() {
+    x01State.players.forEach(p => { p.score = x01State.startingScore; });
+    x01State.currentPlayerIdx = 0;
+    x01State.currentDarts = [];
+    x01State.turnStartScore = x01State.players[0].score;
+    x01State.isBust = false;
+    x01State.gameOver = false;
+    x01State.winner = null;
+
+    x01EnableNext(false);
+    renderX01Screen();
+    navigateTo('play-game');
+}
+
+// ─── Rendering ───────────────────────────────────────────────────────
+
+function renderX01Screen() {
+    renderX01Scoreboard();
+    renderX01Darts();
+    renderX01TurnScore();
+
+    const undoBtn = document.getElementById('x01-undo-btn');
+    if (undoBtn) undoBtn.disabled = !x01State.currentDarts.length || x01State.gameOver;
+}
+
+function renderX01Scoreboard() {
+    const container = document.getElementById('x01-scoreboard');
+    if (!container) return;
+    container.innerHTML = '';
+
+    x01State.players.forEach((player, idx) => {
+        const isActive = idx === x01State.currentPlayerIdx;
+        const isBust = isActive && x01State.isBust;
+        let cls = 'x01-player-card';
+        if (isActive) cls += ' active';
+        if (isBust) cls += ' bust';
+
+        const card = document.createElement('div');
+        card.className = cls;
+        card.innerHTML = `
+            <div class="x01-player-name">${player.name}</div>
+            <div class="x01-player-score">${player.score}</div>
+            <div class="${isBust ? 'x01-bust-tag' : (isActive ? 'x01-active-tag' : '')}">${isBust ? 'BUST' : (isActive ? '▶' : '')}</div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function renderX01Darts() {
+    for (let i = 0; i < 3; i++) {
+        const slot = document.getElementById(`x01-dart-${i}`);
+        if (!slot) continue;
+        const notation = x01State.currentDarts[i] || '';
+        slot.textContent = notation;
+        const isBustDart = x01State.isBust && i === x01State.currentDarts.length - 1;
+        slot.className = isBustDart ? 'dart-slot bust-slot' : 'dart-slot';
+    }
+}
+
+function renderX01TurnScore() {
+    const el = document.getElementById('x01-turn-score');
+    if (!el) return;
+    if (x01State.isBust) {
+        el.textContent = 'BUST';
+        el.classList.add('bust-score');
+    } else {
+        el.classList.remove('bust-score');
+        const pts = x01State.currentDarts.reduce(
+            (sum, n) => sum + Checkouts.parseScore(n), 0
+        );
+        el.textContent = pts;
+    }
+}
+
+function renderX01WinnerScreen(player) {
+    const nameEl = document.getElementById('winner-name');
+    const gameEl = document.getElementById('winner-game');
+    if (nameEl) nameEl.textContent = player.name;
+    if (gameEl) gameEl.textContent = x01State.startingScore + ' · Double Out';
+}
+
+// ─────────────────────────────────────────────────────────────────────
 // Launch confetti animation for premium checkouts
 function launchConfetti() {
     const colors = ['#ffd700', '#ff5a1f', '#22d35a', '#ff3b5c', '#3b9dff', '#c084fc', '#ffffff'];
@@ -466,7 +751,11 @@ document.addEventListener('DOMContentLoaded', () => {
     startGame();
     buildKnowHow();
 
+    // Init x01 setup form
+    initX01Setup();
+
     // Desktop nav items
+    document.getElementById('nav-play')?.addEventListener('click', () => navigateTo('play-setup'));
     document.getElementById('nav-train')?.addEventListener('click', () => navigateTo('game'));
     document.getElementById('nav-knowhow')?.addEventListener('click', () => navigateTo('knowhow'));
     document.getElementById('nav-premium')?.addEventListener('click', () => navigateTo('premium'));
@@ -507,15 +796,44 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('toggle-remaining-btn')?.addEventListener('click', toggleRemaining);
     document.getElementById('toggle-numbers-btn')?.addEventListener('click', toggleNumbers);
 
+    // x01 setup controls
+    document.getElementById('setup-mode-chips')?.addEventListener('click', (e) => {
+        const chip = e.target.closest('.setup-chip');
+        if (!chip) return;
+        x01SetupData.startingScore = parseInt(chip.dataset.mode);
+        document.querySelectorAll('.setup-chip').forEach(c =>
+            c.classList.toggle('active', c.dataset.mode === chip.dataset.mode));
+    });
+
+    document.getElementById('add-player-btn')?.addEventListener('click', () => {
+        if (x01SetupData.playerNames.length >= 4) return;
+        x01SetupData.playerNames.push(`Player ${x01SetupData.playerNames.length + 1}`);
+        renderSetupPlayers();
+    });
+
+    document.getElementById('start-x01-btn')?.addEventListener('click', startX01Game);
+
+    // x01 game controls
+    document.getElementById('x01-undo-btn')?.addEventListener('click', x01UndoDart);
+    document.getElementById('x01-next-btn')?.addEventListener('click', x01NextPlayer);
+
+    // x01 result controls
+    document.getElementById('play-again-btn')?.addEventListener('click', restartX01Game);
+    document.getElementById('new-game-btn')?.addEventListener('click', () => navigateTo('play-setup'));
+
     // Internal nav links (e.g. Know-How → Premium)
     document.addEventListener('click', (e) => {
         const link = e.target.closest('[data-nav]');
         if (link) navigateTo(link.dataset.nav);
     });
 
-    // Dartboard click events
+    // Dartboard click events — route to active mode
     document.addEventListener('dart-clicked', (e) => {
-        const { notation, points } = e.detail;
-        addDart(notation);
+        const { notation } = e.detail;
+        if (state.screen === 'game') {
+            addDart(notation);
+        } else if (state.screen === 'play-game') {
+            x01AddDart(notation);
+        }
     });
 });
