@@ -43,6 +43,103 @@ function navigateTo(screen) {
     closeMenu();
 }
 
+// ─── Checkout Hint ───────────────────────────────────────────────────
+
+let hintsVisible = true;
+
+function renderCheckoutHint(remaining, panelId) {
+    const panel = document.getElementById(panelId);
+    if (!panel) return;
+
+    const invalid = !remaining || remaining <= 0 || remaining > 170
+        || Checkouts.IMPOSSIBLE_CHECKOUTS.has(remaining);
+
+    if (invalid) {
+        panel.classList.remove('visible');
+        panel.innerHTML = '';
+        return;
+    }
+
+    if (!hintsVisible) {
+        panel.innerHTML = `
+            <div class="hint-inner hint-inner-collapsed">
+                <svg class="hint-icon" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="13" y1="3" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="hint-label">Checkout</span>
+                <button class="hint-toggle" data-panel="${panelId}">Show</button>
+            </div>`;
+        panel.classList.add('visible');
+        panel.querySelector('.hint-toggle').addEventListener('click', () => {
+            hintsVisible = true;
+            renderCheckoutHint(remaining, panelId);
+        });
+        return;
+    }
+
+    const optimal = Checkouts.OPTIMAL_CHECKOUTS[remaining];
+    if (!optimal) {
+        panel.classList.remove('visible');
+        panel.innerHTML = '';
+        return;
+    }
+
+    const premium = window.PremiumCheckouts?.[remaining];
+
+    const makeChips = (darts) =>
+        darts.map(d => `<span class="pp-chip ${dartChipClass(d)}">${d}</span>`).join('');
+
+    let variantsHtml = `
+        <div class="hint-variant">
+            <span class="hint-variant-tag">Opt</span>
+            <div class="hint-chips">${makeChips(optimal)}</div>
+        </div>`;
+
+    if (premium?.v1 && JSON.stringify(premium.v1) !== JSON.stringify(optimal)) {
+        variantsHtml += `
+        <div class="hint-variant">
+            <span class="hint-variant-tag">V1</span>
+            <div class="hint-chips">${makeChips(premium.v1)}</div>
+        </div>`;
+    }
+
+    if (premium?.twoDart) {
+        variantsHtml += `
+        <div class="hint-variant">
+            <span class="hint-variant-tag">2D</span>
+            <div class="hint-chips">${makeChips(premium.twoDart)}</div>
+        </div>`;
+    }
+
+    panel.innerHTML = `
+        <div class="hint-inner">
+            <div class="hint-header">
+                <svg class="hint-icon" viewBox="0 0 16 16" fill="none">
+                    <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+                    <circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/>
+                    <line x1="13" y1="3" x2="10" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span class="hint-label">Checkout</span>
+            </div>
+            <div class="hint-variants">${variantsHtml}</div>
+            <button class="hint-toggle" id="${panelId}-toggle" data-panel="${panelId}">Hide</button>
+        </div>`;
+
+    panel.classList.add('visible');
+
+    panel.querySelector('.hint-toggle').addEventListener('click', () => {
+        hintsVisible = false;
+        renderCheckoutHint(remaining, panelId);
+    });
+}
+
+function showHints(remaining, panelId) {
+    hintsVisible = true;
+    renderCheckoutHint(remaining, panelId);
+}
+
 // Return CSS class for a dart chip
 function dartChipClass(dart) {
     if (!dart) return 'chip-single';
@@ -298,6 +395,8 @@ function renderGameScreen() {
 
     if (targetNumber) targetNumber.textContent = state.target;
     if (remainingNumber) remainingNumber.textContent = state.remaining;
+
+    renderCheckoutHint(state.remaining, 'trainer-hint-panel');
 }
 
 function renderDarts() {
@@ -310,6 +409,8 @@ function renderDarts() {
 
     const remainingNumber = document.getElementById('remaining-number');
     if (remainingNumber) remainingNumber.textContent = state.remaining;
+
+    renderCheckoutHint(state.remaining, 'trainer-hint-panel');
 }
 
 function renderResultScreen() {
@@ -627,6 +728,15 @@ function renderX01Screen() {
     renderX01Scoreboard();
     renderX01Darts();
     renderX01TurnScore();
+
+    // Show checkout hint for current player's remaining score
+    const currentPlayer = x01State.players[x01State.currentPlayerIdx];
+    if (currentPlayer && !x01State.isBust && !x01State.gameOver) {
+        renderCheckoutHint(currentPlayer.score, 'x01-hint-panel');
+    } else {
+        const p = document.getElementById('x01-hint-panel');
+        if (p) { p.classList.remove('visible'); p.innerHTML = ''; }
+    }
 
     const blocked = x01State.isBust || x01State.currentDarts.length >= 3 || x01State.gameOver;
     const missBtn = document.getElementById('x01-miss-btn');
