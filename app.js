@@ -46,6 +46,7 @@ function navigateTo(screen) {
 // Return CSS class for a dart chip
 function dartChipClass(dart) {
     if (!dart) return 'chip-single';
+    if (dart === 'S0') return 'chip-miss';
     if (dart.startsWith('T')) return 'chip-treble';
     if (dart.startsWith('D')) return 'chip-double';
     if (dart === 'Bull' || dart === 'DB' || dart === 'D-Bull' || dart === 'SB') return 'chip-bull';
@@ -627,6 +628,9 @@ function renderX01Screen() {
     renderX01Darts();
     renderX01TurnScore();
 
+    const blocked = x01State.isBust || x01State.currentDarts.length >= 3 || x01State.gameOver;
+    const missBtn = document.getElementById('x01-miss-btn');
+    if (missBtn) missBtn.disabled = blocked;
     const undoBtn = document.getElementById('x01-undo-btn');
     if (undoBtn) undoBtn.disabled = !x01State.currentDarts.length || x01State.gameOver;
 }
@@ -659,7 +663,7 @@ function renderX01Darts() {
         const slot = document.getElementById(`x01-dart-${i}`);
         if (!slot) continue;
         const notation = x01State.currentDarts[i] || '';
-        slot.textContent = notation;
+        slot.textContent = notation === 'S0' ? 'Miss' : notation;
         const isBustDart = x01State.isBust && i === x01State.currentDarts.length - 1;
         slot.className = isBustDart ? 'dart-slot bust-slot' : 'dart-slot';
     }
@@ -814,6 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('start-x01-btn')?.addEventListener('click', startX01Game);
 
     // x01 game controls
+    document.getElementById('x01-miss-btn')?.addEventListener('click', () => x01AddDart('S0'));
     document.getElementById('x01-undo-btn')?.addEventListener('click', x01UndoDart);
     document.getElementById('x01-next-btn')?.addEventListener('click', x01NextPlayer);
 

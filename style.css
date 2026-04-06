@@ -702,6 +702,7 @@ button:focus:not(:focus-visible) {
 .dart-item.chip-double { background: var(--success-dim);  color: var(--success);  border-color: rgba(34,211,90,0.25); }
 .dart-item.chip-bull   { background: var(--gold-dim);     color: var(--gold);     border-color: rgba(255,215,0,0.3); }
 .dart-item.chip-single { background: var(--bg-surface);   color: var(--text-secondary); border-color: var(--border); }
+.dart-item.chip-miss   { background: var(--bg-surface);   color: var(--text-muted);     border-color: var(--border); font-style: italic; }
 
 /* ───────────────────────────────────────────
    Premium Checkouts Screen
